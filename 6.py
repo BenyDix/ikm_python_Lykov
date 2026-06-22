@@ -60,6 +60,8 @@ def parse_dominoes(input_string):
         return None, "не найдено ни одной кости домино"
     
     dominoes = []
+    seen = set()
+    
     for i, part in enumerate(parts):
         if len(part) != 2:
             return None, f"кость '{part}' должна состоять из ровно 2 цифр"
@@ -72,6 +74,11 @@ def parse_dominoes(input_string):
         
         if left < 0 or left > 6 or right < 0 or right > 6:
             return None, f"кость '{part}' содержит цифры вне диапазона 0-6"
+        
+        normalized = tuple(sorted((left, right)))
+        if normalized in seen:
+            return None, f"кость '{part}' повторяется"
+        seen.add(normalized)
         
         dominoes.append((left, right))
     
